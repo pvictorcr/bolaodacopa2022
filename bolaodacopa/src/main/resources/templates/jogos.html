@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body>
+	
+	<div th:replace="fragments/menu :: menu"></div>
+	
+	<div id="verificacaopenaltis" class="modal">
+	<table class="jogo">
+	<tr>
+		<td colspan="2"><p class="bemvindo">Escolha o vencedor dos p&ecirc;naltis:</p></td>
+	</tr>
+		<tr>
+		<td><img src="bandeira_interrogacao.png" class="bandeira" id="pais_1"></td>
+		<td><img src="bandeira_interrogacao.png" class="bandeira" id="pais_2"></td>
+		</tr>
+	</table>
+	</div>
+
+<p class="mensagemdeerro" th:text="${result}"></p>
+
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.tabelaCommandCommand"*/-->
+<form id="tabelaCommand" th:object="${tabelaCommandCommand}" th:action="@{/atualizarjogo/}"  method="post">
+<input type="hidden" id="actionGrupos" name="actionGrupos" th:value="${tabelaCommand.actionGrupos}" />
+<input type="hidden" id="actionEliminatorias" name="actionEliminatorias" th:value="${tabelaCommand.actionEliminatorias}" />
+<div th:each="eliminatoria, stat1 : ${tabelaCommand.eliminatorias}">
+	<div class="tabela" th:if="${eliminatoria.isAtivo}">
+
+		<span class="tituloGrupo" th:text="${eliminatoria.getNomeFase()}">OITAVAS DE FINAL</span>
+		<table class="jogo" th:id="@{'tabelaeliminatorias_' + ${stat1.index}}">
+			
+			<tr th:each="jogo, stat2 : ${eliminatoria.jogos}">
+			<td><img th:src="@{'/resources/img/' + ${jogo.p1.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p1.nome}"></td>
+				<td th:style="@{${jogo.p1GanhouPenaltis()} ? 'background-color:lightgreen;' : ''}" th:text="${jogo.p1.sigla}">BRA</td>
+				<td><input class="placar" type="text" th:name="|eliminatorias[${stat1.index}].jogos[${stat2.index}].gols1|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${jogo.terminado} ? ${jogo.gols1} : ''" th:readonly="${jogo.terminado}"></td>
+				<td>X</td>
+				<td><input class="placar" type="text" th:name="|eliminatorias[${stat1.index}].jogos[${stat2.index}].gols2|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${jogo.terminado} ? ${jogo.gols2} : ''" th:readonly="${jogo.terminado}"></td>
+				<td th:style="@{${jogo.p2GanhouPenaltis()} ? 'background-color:lightgreen;' : ''}" th:text="${jogo.p2.sigla}">ALE</td>
+				<td><img th:src="@{'/resources/img/' + ${jogo.p2.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p2.nome}"></td>
+				<td class="info"><span style="color: black; font-size: 18px;"th:text="${jogo.getFormatedDate()}">01/01 20:00</span><br><span th:text="${jogo.estadio}">Nome do Estadio</span></td>
+				<td th:if="${tabelaCommand.usuario.isAdmin()}"><img th:src="@{${jogo.terminado} ? '/resources/img/botao_modificar_red.png' : '/resources/img/botao_salvar_red.png'}" th:onclick="'javascript:verificarPenaltis(' + ${stat1.index} + ',' + ${stat2.index} + ',' + ${jogo.numeroDoJogo} + ',' + ${jogo.terminado} + ')'"/></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<!--/*@thymesVar id="jogos" type="com.pvictorcr.bolaodacopa.commands.JogoCommand"*/-->
+<!--/*@thymesVar id="classificacao" type="com.pvictorcr.bolaodacopa.commands.PaisCommand"*/-->
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.tabelaCommandCommand"*/-->
+<div th:each="grupo, stat1 : ${tabelaCommand.grupos}">
+	<div class="tabela" th:if="${not #lists.isEmpty(grupo.jogos)}">
+	
+		<span class="tituloGrupo" th:text="@{'GRUPO ' + ${grupo.grupo}}">GRUPO A</span>
+		<table th:id="@{'tabelagrupo_' + ${stat1.index}}" class="jogo">
+			
+			<tr th:each="jogo, stat2 : ${grupo.jogos}">
+			<td>
+				<img th:src="@{'/resources/img/' + ${jogo.p1.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p1.nome}"></td>
+				<td th:text="${jogo.p1.sigla}">BRA</td>
+				<td><input class="placar" type="text" th:name="|grupos[${stat1.index}].jogos[${stat2.index}].gols1|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${jogo.terminado} ? ${jogo.gols1} : ''" th:readonly="${jogo.terminado}"></td>
+				<td>X</td>
+				<td><input class="placar" type="text" th:name="|grupos[${stat1.index}].jogos[${stat2.index}].gols2|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${jogo.terminado} ? ${jogo.gols2} : ''" th:readonly="${jogo.terminado}"></td>
+				<td th:text="${jogo.p2.sigla}">ALE</td>
+				<td><img th:src="@{'/resources/img/' + ${jogo.p2.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p2.nome}"></td>
+				<td class="info"><span style="color: black; font-size: 18px;"th:text="${jogo.getFormatedDate()}">01/01 20:00</span><br><span th:text="${jogo.estadio}">Nome do Estadio</span></td>
+				<td th:if="${tabelaCommand.usuario.isAdmin()}"><img th:src="@{${jogo.terminado} ? '/resources/img/botao_modificar_red.png' : '/resources/img/botao_salvar_red.png'}" th:onclick="'javascript:salvarJogo(' + ${stat1.index} + ',' + ${stat2.index} + ',' + ${jogo.numeroDoJogo} + ',' + ${jogo.terminado} + ')'"/></td>
+			</tr>
+			
+		</table>
+		
+		<div class="tabelaPontuacao" th:if="${not #lists.isEmpty(grupo.classificacao)}">
+	
+			<table class="pontos">
+				<tbody class="pontosList">
+					<tr>
+						<th class="colocacao">&#9867;</th>
+						<th>CLASSIFICA&Ccedil;&Atilde;O</th>
+						<th>P</th>
+						<th>J</th>
+						<th>V</th>
+						<th>E</th>
+						<th>D</th>
+						<th>GP</th>
+						<th>GC</th>
+						<th>SG</th>
+						<th>%</th>
+					</tr>
+					<tr th:each="pais : ${grupo.classificacao}">
+						<td class="colocacao">&#9867;</td>
+						<td th:text="${pais.nome}">Arábia Saudita</td>
+						<td th:text="${pais.pontos}"></td>
+						<td th:text="${pais.jogos}"></td>
+						<td th:text="${pais.vitorias}"></td>
+						<td th:text="${pais.empates}"></td>
+						<td th:text="${pais.derrotas}"></td>
+						<td th:text="${pais.gp}"></td>
+						<td th:text="${pais.gc}"></td>
+						<td th:text="${pais.gp} - ${pais.gc}"></td>
+						<td></td>
+						<td style="display: none;">times[0]</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</form>
+	
+	<script type="text/javascript" src="/resources/js/copa.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body onload="carregaChart()">
+	<script th:inline="javascript">var chartData = /*[[${grafico.dados}]]*/ "";</script>
+	<script th:inline="javascript">var nomes = /*[[${grafico.nomes}]]*/ "";</script>
+	<script th:inline="javascript">var titulo = /*[[${grafico.titulo}]]*/ "";</script>
+	<script th:inline="javascript">var subtitulo = /*[[${grafico.subtitulo}]]*/ "";</script>
+	<div th:replace="fragments/menu :: menu"></div>
+
+	<p class="cabecalho">&nbsp;</p>
+
+    <div align="center">
+        <div id="grafico"></div>
+    </div>
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="/resources/js/grafico.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body>
+	
+	<div th:replace="fragments/menu :: menu"></div>
+	
+	<p class="cabecalho" th:text="'Classifica&ccedil;&atilde;o ' + (${simulacao == true} ? ' Simulada' : 'Geral')">Classifica&ccedil;&atilde;o Geral</p>
+
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.usuarioCommand"*/-->
+<form id="classificacao" th:action="@{/detalheusuario/}"  method="post">
+<input type="hidden" id="email" name="email" th:value="none" />
+	<div class="tabela">
+		<table>
+			<tr th:each="participante, stat1 : ${classificacao}">
+				<td  th:text="${participante.nome}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen;' : ''}">Joao da Silva</td>
+				<td th:text="@{${stat1.index + 1} + '&deg; lugar'}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen' : ''}"></td>
+				<td th:text="@{${participante.getPontuacao()} + ' pontos'}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; ' : ''}">36 pontos</td>
+				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}"><img th:src="@{'/resources/img/' + ${participante.getNomeImagemClassificacao()} + '.png'}" class="bandeira" th:alt="${participante.getNomeImagemClassificacao()}"></td>
+				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}"><img class="bandeira" src="/resources/img/olho.png" th:data-parameter1="${participante.email}" onclick="javascript:escolherUsuarioDetalhes(this.getAttribute('data-parameter1'));"/></td>
+			</tr>
+		</table>
+	</div>
+</form>
+	<script type="text/javascript" src="/resources/js/copa.js"></script>
+</body>
+</html>

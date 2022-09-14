@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body>
+	
+	<div th:replace="fragments/menu :: menu"></div>
+	
+	<p class="cabecalho">&nbsp;</p>
+	<p class="cabecalho">Parece que essa &eacute; a primeira vez que voc&ecirc; acessa o Bol&atilde;o</p>
+	<p class="cabecalho">Confirme seu nome:</p>
+
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.usuarioCommand"*/-->
+<form id="cadastro" th:action="@{/cadastrar/}"  method="post">
+	<div class="tabela">
+		<table>
+			<tr>
+				<td><input type="text" NAME="nomeUsuario" maxLength="100" style="width: 100%;" th:value="${usuario.nome}"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Cadastrar!"></td>
+			</tr>
+		</table>
+	</div>
+</form>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body>
+	<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.usuarioCommand"*/-->
+	<div th:replace="fragments/menu :: menu"></div>
+	
+	
+	<p class="bemvindo" th:text="@{'Ol&aacute;, ' + ${usuario.nome}}">Ol&atilde;, Pedro Victor</p>
+	<p class="bemvindo" th:text="@{'Voc&ecirc; fez ' + ${usuario.getPontuacao()} + ' pontos at&eacute; o momento'}">Você fez 80 pontos at&eacute; o momento</p>
+	<p class="mensagemdeerro" th:text="${result}"></p>
+
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.tabelaCommand"*/-->
+<form id="apostaCommand" th:object="${tabelaCommandCommand}" th:action="@{/atualizarapostagrupo/}"  method="post">
+<input type="hidden" id="actionGrupos" name="actionGrupos" th:value="${tabelaCommand.actionGrupos}" />
+<input type="hidden" id="actionEliminatorias" name="actionEliminatorias" th:value="${tabelaCommand.actionEliminatorias}" />
+<div th:each="eliminatoria, stat1 : ${tabelaCommand.eliminatorias}">
+	<div class="tabela" th:if="${eliminatoria.isAtivo}">
+
+		<span class="tituloGrupo" th:text="${eliminatoria.getNomeFase()}">OITAVAS DE FINAL</span>
+		<table class="jogo" th:id="@{'apostaeliminatorias_' + ${stat1.index}}">
+			
+			<tr th:each="jogo, stat2 : ${eliminatoria.jogos}">
+			<td><img th:src="@{'/resources/img/' + ${jogo.p1.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p1.nome}"></td>
+				<td th:text="${jogo.p1.sigla}">BRA</td>
+				<td><input class="placar" type="text" th:name="|eliminatorias[${stat1.index}].jogos[${stat2.index}].gols1|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} ? ${usuario.aposta.getJogo(jogo.numeroDoJogo).gols1} : ''" th:readonly="${usuario.aposta.jogoExiste(jogo.numeroDoJogo) or jogo.isPrazoApostaAcabado()}"></td>
+				<td>X</td>
+				<td><input class="placar" type="text" th:name="|eliminatorias[${stat1.index}].jogos[${stat2.index}].gols2|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} ? ${usuario.aposta.getJogo(jogo.numeroDoJogo).gols2} : ''" th:readonly="${usuario.aposta.jogoExiste(jogo.numeroDoJogo) or jogo.isPrazoApostaAcabado()}"></td>
+				<td th:text="${jogo.p2.sigla}">ALE</td>
+				<td><img th:src="@{'/resources/img/' + ${jogo.p2.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p2.nome}"></td>
+				<td class="info"><span style="color: black; font-size: 18px;"th:text="${jogo.getFormatedDate()}">30/12 20:00</span><br><span th:text="${jogo.estadio}">Nome do Estadio</span></td>
+				<td><img th:src="@{${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} ? '/resources/img/botao_modificar_red.png' : '/resources/img/botao_salvar_red.png'}" th:onclick="'javascript:salvarApostaEliminatorias(' + ${stat1.index} + ',' + ${stat2.index} + ',' + ${jogo.numeroDoJogo} + ',' + ${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} + ')'"/></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<!--/*@thymesVar id="jogos" type="com.pvictorcr.bolaodacopa.commands.JogoCommand"*/-->
+<!--/*@thymesVar id="classificacao" type="com.pvictorcr.bolaodacopa.commands.PaisCommand"*/-->
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.tabelaCommandCommand"*/-->
+<div th:each="grupo, stat1 : ${tabelaCommand.grupos}">
+	<div class="tabela" th:if="${not #lists.isEmpty(grupo.jogos)}">
+	
+		<span class="tituloGrupo" th:text="@{'GRUPO ' + ${grupo.grupo}}">GRUPO X</span>
+		<table th:id="@{'apostagrupo_' + ${stat1.index}}" class="jogo">
+			
+			<tr th:each="jogo, stat2 : ${grupo.jogos}">
+			<td>
+				<img th:src="@{'/resources/img/' + ${jogo.p1.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p1.nome}"></td>
+				<td th:text="${jogo.p1.sigla}">BRA</td>
+				<td><input class="placar" type="text" th:name="|grupos[${stat1.index}].jogos[${stat2.index}].gols1|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} ? ${usuario.aposta.getJogo(jogo.numeroDoJogo).gols1} : ''" th:readonly="${usuario.aposta.jogoExiste(jogo.numeroDoJogo)}"></td>
+				<td>X</td>
+				<td><input class="placar" type="text" th:name="|grupos[${stat1.index}].jogos[${stat2.index}].gols2|" maxLength="2" onkeypress="return event.charCode >= 48 && event.charCode <= 57" th:value="${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} ? ${usuario.aposta.getJogo(jogo.numeroDoJogo).gols2} : ''" th:readonly="${usuario.aposta.jogoExiste(jogo.numeroDoJogo)}"></td>
+				<td th:text="${jogo.p2.sigla}">ALE</td>
+				<td><img th:src="@{'/resources/img/' + ${jogo.p2.nomeImg} + '.png'}" class="bandeira" th:alt="${jogo.p2.nome}"></td>
+				<td class="info"><span style="color: black; font-size: 18px;"th:text="${jogo.getFormatedDate()}">30/12 20:00</span><br><span th:text="${jogo.estadio}">Nome do Estadio</span></td>
+				<td><img th:src="@{${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} ? '/resources/img/botao_modificar_red.png' : '/resources/img/botao_salvar_red.png'}" th:onclick="'javascript:salvarApostaGrupos(' + ${stat1.index} + ',' + ${stat2.index} + ',' + ${jogo.numeroDoJogo} + ',' + ${usuario.aposta.jogoExiste(jogo.numeroDoJogo)} + ')'"/></td>
+			</tr>
+			
+		</table>
+	</div>
+	</div>
+</form>
+<script type="text/javascript" src="/resources/js/copa.js"></script>
+</body>
+</html>

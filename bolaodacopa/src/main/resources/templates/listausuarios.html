@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body>
+	
+	<div th:replace="fragments/menu :: menu"></div>
+
+	<p class="cabecalho">&nbsp;</p>
+	<p class="cabecalho">Escolha o usu&aacute;rio para editar</p>
+	<p class="mensagemdeerro" th:text="${result}"></p>
+
+<!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.usuarioCommand"*/-->
+<form id="listausuarios" th:action="@{/apostasusuario/}"  method="post">
+<input type="hidden" id="email" name="email" th:value="none" />
+	<div class="tabela">
+		<table>
+			<tr th:each="participante, stat1 : ${classificacao}">
+				<td th:text="${participante.nome}">Joao da Silva</td>
+				<td th:if="not ${participante.email.equals(usuario.email)}"><img class="bandeira" src="/resources/img/botao_modificar_red.png" th:data-parameter1="${participante.email}" onclick="javascript:escolherUsuarioDetalhesAdm(this.getAttribute('data-parameter1'));"/></td>
+			</tr>
+		</table>
+	</div>
+</form>
+	<script type="text/javascript" src="/resources/js/copa_adm.js"></script>
+</body>
+</html>

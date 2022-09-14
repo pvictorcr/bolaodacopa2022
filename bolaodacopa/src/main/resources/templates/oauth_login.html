@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Login do Bol&atilde;o</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous"
+	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+<script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous"
+	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"
+	th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+	<!--/*@thymesVar id="urls" type="java.util.Map"*/-->
+	
+	<div>
+    <h2>Please Login</h2>
+    <br/>
+</div>
+<div>
+    <h4><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h4>   
+</div>
+<div><p>OR</p></div>
+     
+<form th:action="@{/login}" method="post" style="max-width: 400px; margin: 0 auto;">
+<div class="border border-secondary rounded p-3">
+    <div th:if="${param.error}">
+        <p class="text-danger">Invalid username or password.</p>
+    </div>
+    <div th:if="${param.logout}">
+        <p class="text-warning">You have been logged out.</p>
+    </div>
+    <div>
+        <p><input type="email" name="email" required class="form-control" placeholder="E-mail" /></p>
+    </div>
+    <div>
+        <p><input type="password" name="pass" required class="form-control" placeholder="Password" /></p>
+    </div>
+    <div>
+        <p><input type="submit" value="Login" class="btn btn-primary" /></p>
+    </div>
+</div>
+</form>
+</body>
+</html>
