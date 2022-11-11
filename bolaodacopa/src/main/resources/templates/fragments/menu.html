@@ -7,17 +7,18 @@
 	<div th:fragment="menu">
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a class="grupo" href="/tabela">Tabela</a>
-		<a class="grupo" href="/apostas">Apostas</a>
-		<a class="grupo" href="/classificacao">Classifica&ccedil;&atilde;o</a>
-		<a class="grupo" href="/grafico">Gr&aacute;fico</a>
-		<a class="grupo" href="/simulacao">Simula&ccedil;&atilde;o</a>
+		<a class="grupo" th:href="@{'/apostas'}">Apostas</a>
+		<a class="grupo" th:href="@{'/regras'}">Regras</a>
+		<a class="grupo" th:href="@{'/tabela'}">Tabela</a>
+		<a class="grupo" th:href="@{'/classificacao'}">Classifica&ccedil;&atilde;o</a>
+		<a class="grupo" th:href="@{'/grafico'}">Gr&aacute;fico</a>
+		<a class="grupo" th:href="@{'/simulacao'}">Simula&ccedil;&atilde;o</a>
 		<span id="tituloGrupo" th:if="${usuario.isAdmin()}" >Administra&ccedil;&atilde;o</span>
-		<a class="grupo" href="/alterar_aposta_usuario" th:if="${usuario.isAdmin()}" >Alterar Aposta</a>
-		<a class="faseFinal" href="/logout">Sair</a>
+		<a class="grupo" th:href="@{'/alterar_aposta_usuario'}" th:if="${usuario.isAdmin()}" >Alterar Aposta</a>
+		<a class="faseFinal" th:href="@{'/logout'}">Sair</a>
 	</div>
 	<span class="abrir" onclick="openNav()">&#9776; Abrir</span>
-	<script type="text/javascript" src="/resources/js/menu.js"></script>
+	<script type="text/javascript" th:src="@{'/resources/js/menu.js'}"></script>
 	</div>
 </body>
 </html>

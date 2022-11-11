@@ -11,10 +11,12 @@ import com.pvictorcr.bolaodacopa.model.JogoAposta;
 public class ApostaToApostaCommand implements Converter<Aposta, ApostaCommand> {
 
 	private final JogoApostaToJogoApostaCommand jogoApostaToJogoApostaCommand;
+	private final PaisToPaisCommand paisToPaisCommand;
 	
-	public ApostaToApostaCommand(JogoApostaToJogoApostaCommand jogoApostaToJogoApostaCommand) {
+	public ApostaToApostaCommand(JogoApostaToJogoApostaCommand jogoApostaToJogoApostaCommand, PaisToPaisCommand paisToPaisCommand) {
 		
 		this.jogoApostaToJogoApostaCommand = jogoApostaToJogoApostaCommand;
+		this.paisToPaisCommand = paisToPaisCommand;
 	}
 	
 	@Override
@@ -25,6 +27,9 @@ public class ApostaToApostaCommand implements Converter<Aposta, ApostaCommand> {
 		}
 		
 		ApostaCommand command = new ApostaCommand();
+		
+		command.setCampeao(paisToPaisCommand.convert(source.getCampeao()));
+		command.setViceCampeao(paisToPaisCommand.convert(source.getViceCampeao()));
 		
 		command.setId(source.getId());
 		for(JogoAposta ja : source.getJogosApostas())

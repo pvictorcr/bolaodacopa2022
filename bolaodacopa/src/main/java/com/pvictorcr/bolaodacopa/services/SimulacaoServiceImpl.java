@@ -73,11 +73,17 @@ public class SimulacaoServiceImpl implements SimulacaoService {
 			
 			for(GrupoCommand gc : form.getGrupos())
 				for(JogoCommand jc : gc.getJogos())
-					uc.getAposta().getJogo(jc.getNumeroDoJogo()).getJogo().setGols(jc.getGols1(), jc.getGols2(), true);
+					if(jc.getGols1() != null && !jc.getGols1().trim().isEmpty() &&
+							jc.getGols2() != null && !jc.getGols2().trim().isEmpty())
+						if(uc.getAposta().getJogo(jc.getNumeroDoJogo()).getJogo() != null)
+							uc.getAposta().getJogo(jc.getNumeroDoJogo()).getJogo().setGols(jc.getGols1(), jc.getGols2(), true);
 			
 			for(EliminatoriaCommand ec : form.getEliminatorias())
 				for(JogoCommand jc : ec.getJogos())
-					uc.getAposta().getJogo(jc.getNumeroDoJogo()).getJogo().setGols(jc.getGols1(), jc.getGols2(), true);
+					if(jc.getGols1() != null && !jc.getGols1().trim().isEmpty() &&
+							jc.getGols2() != null && !jc.getGols2().trim().isEmpty())
+						if(uc.getAposta().getJogo(jc.getNumeroDoJogo()).getJogo() != null)
+							uc.getAposta().getJogo(jc.getNumeroDoJogo()).getJogo().setGols(jc.getGols1(), jc.getGols2(), true);
 			
 		}
 		Collections.sort(classificacaoSim, Collections.reverseOrder());

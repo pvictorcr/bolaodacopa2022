@@ -2,5 +2,5 @@ package com.pvictorcr.bolaodacopa.constants;
 
 public final class Pontos {
 	
-	public static final int[][] PONTOS = {{15,8},{8,4},{8,4},{7,3},{6,2},{5,1},};
+	public static final float[][] PONTOS = {{36,18,6},{27,12,4.5f},{27,12,4.5f},{27,12,4.5f},{27,12,4.5f},{18,9,3}};
 }

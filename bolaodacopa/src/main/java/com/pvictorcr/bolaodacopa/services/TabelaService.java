@@ -18,4 +18,6 @@ public interface TabelaService extends CrudService<Jogo, Long> {
 	public PaisCommand getPaisFromJogo(JogoCommand jc, int pais);
 
 	public TabelaCommand findTabelaGruposCommands();
+	
+	public int getTotalJogosFinalizados();
 }

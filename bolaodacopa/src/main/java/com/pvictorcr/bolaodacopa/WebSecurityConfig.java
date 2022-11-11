@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .requiresSecure()
         .and()
 		.authorizeRequests()
-		.antMatchers("/", "/oauth_login", "/error", "/webjars/**", "/h2-console/**")
+		.antMatchers("/", "/bolaodacopa/**", "/oauth_login", "/error", "/webjars/**", "/h2-console/**")
 		.permitAll()
 		//.antMatchers("/patient/**").access("hasRole('" + UserRole.ROLE_PATIENT.name() + "')")
 		//.antMatchers("/professional/**").access("hasRole('" + UserRole.ROLE_PROFESSIONAL.name() + "')")
@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.oauth2Login()
 		.loginPage("/oauth_login")
-		.defaultSuccessUrl("/loginsuccess", true)
+		.defaultSuccessUrl("/bolaodacopa/loginsuccess", true)
 		//.loginPage("/login")
 	    .userInfoEndpoint()
 	        .userService(oauthUserService)
@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	            String nome = oauthUser.getFullName();
 	            boolean isNew = userService.processOAuthPostLogin(email, nome);
 	 
-	            response.sendRedirect("/loginsuccess" + (isNew ? "?newuser=true" : ""));
+	            response.sendRedirect("/bolaodacopa/loginsuccess" + (isNew ? "?newuser=true" : ""));
 	        }
 	    })
 		/*.and()

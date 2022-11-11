@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/header :: header"></head>
+<body>
+	<div th:replace="fragments/menu :: menu"></div>
+	
+	<div align="center">
+		<textarea id="regras" class="areaRegras" rows="80" cols="80" th:text="${regras}" readonly>
+		</textarea>
+	</div>
+</body>
+</html>

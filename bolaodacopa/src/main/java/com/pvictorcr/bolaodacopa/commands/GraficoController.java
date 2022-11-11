@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GraficoController extends BaseCommand {
 
-	private int[][] dados;
+	private Float[][] dados;
 	private String[] nomes;
 	private String titulo;
 	private String subtitulo;

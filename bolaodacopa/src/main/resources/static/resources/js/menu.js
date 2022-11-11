@@ -10,7 +10,7 @@ function closeNav() {
 async function carrega_apostas(){
 	
 	const contentDiv = document.getElementById("mainDiv");
-    contentDiv.innerHTML = await fetchHtmlAsText("/apostas");
+    contentDiv.innerHTML = await fetchHtmlAsText("/bolaodacopa/apostas");
 }
 
 async function fetchHtmlAsText(url) {

@@ -55,6 +55,18 @@ public class TabelaServiceImpl implements TabelaService {
         
         return jogoComs;
 	}
+	
+	public int getTotalJogosFinalizados() {
+		
+		int total = 0;
+		
+		List<JogoCommand> jogos = findAllCommands();
+		for(JogoCommand jc : jogos)
+			if(jc.isTerminado())
+				++total;
+		
+		return total;
+	}
 
 	@Override
 	public Set<Jogo> findAll() {

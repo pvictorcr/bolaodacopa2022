@@ -16,11 +16,12 @@
 		<table>
 			<tr th:each="participante, stat1 : ${classificacao}">
 				<td th:text="${participante.nome}">Joao da Silva</td>
-				<td th:if="not ${participante.email.equals(usuario.email)}"><img class="bandeira" src="/resources/img/botao_modificar_red.png" th:data-parameter1="${participante.email}" onclick="javascript:escolherUsuarioDetalhesAdm(this.getAttribute('data-parameter1'));"/></td>
+				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}" th:if="${usuario.isAdmin()}" th:text="${participante.getPorcentagemJogosPreenchidos}"></td>
+				<td th:if="not ${participante.email.equals(usuario.email)}"><img class="bandeira" th:src="@{'/resources/img/botao_modificar_red.png'}" th:data-parameter1="${participante.email}" onclick="javascript:escolherUsuarioDetalhesAdm(this.getAttribute('data-parameter1'));"/></td>
 			</tr>
 		</table>
 	</div>
 </form>
-	<script type="text/javascript" src="/resources/js/copa_adm.js"></script>
+	<script type="text/javascript" th:src="@{'/resources/js/copa_adm.js'}"></script>
 </body>
 </html>

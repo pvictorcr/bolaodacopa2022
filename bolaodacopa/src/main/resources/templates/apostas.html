@@ -6,8 +6,8 @@
 	<div th:replace="fragments/menu :: menu"></div>
 	
 	
-	<p class="bemvindo" th:text="@{'Ol&aacute;, ' + ${usuario.nome}}">Ol&atilde;, Pedro Victor</p>
-	<p class="bemvindo" th:text="@{'Voc&ecirc; fez ' + ${usuario.getPontuacao()} + ' pontos at&eacute; o momento'}">Você fez 80 pontos at&eacute; o momento</p>
+	<p class="bemvindo" th:text="@{'Ol&aacute;, ' + ${usuario.nome}}">Ol&aacute;, Pedro Victor</p>
+	<p class="bemvindo" th:text="@{'Voc&ecirc; fez ' + ${usuario.getPontuacaoFormatada()} + ' pontos at&eacute; o momento'}">Você fez 80 pontos at&eacute; o momento</p>
 	<p class="mensagemdeerro" th:text="${result}"></p>
 
 <!--/*@thymesVar id="tabelaCommand" type="com.pvictorcr.bolaodacopa.commands.tabelaCommand"*/-->
@@ -59,8 +59,37 @@
 			
 		</table>
 	</div>
+</div>
+	<div class="tabela">
+	
+		<span class="tituloGrupo">Final</span>
+		<p class="mensagemdeerro" id="mensagemdeerrofinal"></p>
+		<table id="apostafinalinicial" class="jogo">
+			
+			<tr>
+			<td colspan="2">Vice-Campe&atilde;o</td>
+			<td colspan="2">Campe&atilde;o</td>
+			</tr>
+			<tr>
+				<td width="10%">
+					<img th:src="@{${usuario.aposta.viceCampeao.id} > 0 ? '/resources/img/' + ${usuario.aposta.viceCampeao.nomeImg} + '.png' : '/resources/img/bandeira_interrogacao.png'}" class="bandeira" th:alt="@{${usuario.aposta.viceCampeao} != null ? ${usuario.aposta.viceCampeao.nome} : '?'}"></td>
+				<td width="35%">
+					<select name="vicecampeao" id="vicecampeao">
+						<option value="0">selecione</option>
+						<option th:each="pais : ${paises}" th:value="${pais.nome}" th:text="${pais.nome}" th:selected="${pais.nome.equals(usuario.aposta.viceCampeao.nome)}"></option>
+					</select>
+				</td>
+				<td width="35%">
+					<select name="campeao" id="campeao">
+						<option value="0">selecione</option>
+						<option th:each="pais : ${paises}" th:value="${pais.nome}" th:text="${pais.nome}" th:selected="${pais.nome.equals(usuario.aposta.campeao.nome)}"></option>
+					</select></td>
+				<td width="10%"><img th:src="@{${usuario.aposta.campeao.id} > 0 ? '/resources/img/' + ${usuario.aposta.campeao.nomeImg} + '.png' : '/resources/img/bandeira_interrogacao.png'}" class="bandeira" th:alt="@{${usuario.aposta.campeao} != null ? ${usuario.aposta.campeao.nome} : '?'}"></td>
+				<td width="10%"><img th:src="@{${not usuario.aposta.finalJaApostada} ? '/resources/img/botao_salvar_red.png' : '/resources/img/botao_modificar_red.png'}" th:onclick="'javascript:salvarFinal()'"/></td>
+			</tr>
+		</table>
 	</div>
 </form>
-<script type="text/javascript" src="/resources/js/copa.js"></script>
+<script type="text/javascript" th:src="@{'/resources/js/copa.js'}"></script>
 </body>
 </html>

@@ -8,11 +8,11 @@
 	<div id="verificacaopenaltis" class="modal">
 	<table class="jogo">
 	<tr>
-		<td colspan="2"><p class="bemvindo">Escolha o vencedor dos p&ecirc;naltis:</p></td>
+		<td colspan="2"><p class="bemvindo">Quem venceu nos p&ecirc;naltis/prorroga&ccedil;&atilde;o?</p></td>
 	</tr>
 		<tr>
-		<td><img src="bandeira_interrogacao.png" class="bandeira" id="pais_1"></td>
-		<td><img src="bandeira_interrogacao.png" class="bandeira" id="pais_2"></td>
+		<td><img th:src="@{'bandeira_interrogacao.png'}" class="bandeira" id="pais_1"></td>
+		<td><img th:src="@{'bandeira_interrogacao.png'}" class="bandeira" id="pais_2"></td>
 		</tr>
 	</table>
 	</div>
@@ -106,6 +106,6 @@
 </div>
 </form>
 	
-	<script type="text/javascript" src="/resources/js/copa.js"></script>
+	<script type="text/javascript" th:src="@{'/resources/js/copa.js'}"></script>
 </body>
 </html>

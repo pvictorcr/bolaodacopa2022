@@ -14,7 +14,7 @@ function closePenalti() {
 
 function salvarJogo(grupo, jogo, numerodojogo, terminado){
 	
-	document.getElementById('tabelaCommand').setAttribute('action','/atualizarjogogrupo/');
+	document.getElementById('tabelaCommand').setAttribute('action','/bolaodacopa/atualizarjogogrupo/');
 	
 	if(!isInt(document.getElementById('tabelagrupo_' + grupo).rows[jogo].cells[2].getElementsByTagName("input")[0].value) ||
 		!isInt(document.getElementById('tabelagrupo_' + grupo).rows[jogo].cells[4].getElementsByTagName("input")[0].value))
@@ -32,7 +32,7 @@ function salvarJogo(grupo, jogo, numerodojogo, terminado){
 
 function verificarPenaltis(fase, jogo, numerodojogo, terminado){
 	
-	document.getElementById('tabelaCommand').setAttribute('action','/atualizarjogoeliminatoria/');
+	document.getElementById('tabelaCommand').setAttribute('action','/bolaodacopa/atualizarjogoeliminatoria/');
 	
 	if(!isInt(document.getElementById('tabelaeliminatorias_' + fase).rows[jogo].cells[2].getElementsByTagName("input")[0].value) ||
 		!isInt(document.getElementById('tabelaeliminatorias_' + fase).rows[jogo].cells[4].getElementsByTagName("input")[0].value))
@@ -61,7 +61,7 @@ function verificarPenaltis(fase, jogo, numerodojogo, terminado){
 
 function salvarApostaGrupos(grupo, jogo, numerodojogo, terminado){
 	
-	document.getElementById('apostaCommand').setAttribute('action','/atualizarapostagrupo/');
+	document.getElementById('apostaCommand').setAttribute('action','/bolaodacopa/atualizarapostagrupo/');
 	
 	if(!isInt(document.getElementById('apostagrupo_' + grupo).rows[jogo].cells[2].getElementsByTagName("input")[0].value) ||
 		!isInt(document.getElementById('apostagrupo_' + grupo).rows[jogo].cells[4].getElementsByTagName("input")[0].value))
@@ -79,7 +79,7 @@ function salvarApostaGrupos(grupo, jogo, numerodojogo, terminado){
 
 function salvarApostaEliminatorias(fase, jogo, numerodojogo, terminado){
 	
-	document.getElementById('apostaCommand').setAttribute('action','/atualizarapostaeliminatoria/');
+	document.getElementById('apostaCommand').setAttribute('action','/bolaodacopa/atualizarapostaeliminatoria/');
 	
 	if(!isInt(document.getElementById('apostaeliminatorias_' + fase).rows[jogo].cells[2].getElementsByTagName("input")[0].value) ||
 		!isInt(document.getElementById('apostaeliminatorias_' + fase).rows[jogo].cells[4].getElementsByTagName("input")[0].value))
@@ -92,6 +92,28 @@ function salvarApostaEliminatorias(fase, jogo, numerodojogo, terminado){
 		return;
 	
 	document.getElementById('actionEliminatorias').value = fase + '_' + jogo + '_' + numerodojogo + '_' + terminado;
+	document.getElementById('apostaCommand').submit();
+}
+
+function salvarFinal(){
+	
+	var vicecampeao = document.getElementById("vicecampeao");
+	var campeao = document.getElementById("campeao");
+	
+	if(vicecampeao.value == 0 || campeao.value == 0){
+		document.getElementById('campeao').focus();
+		document.getElementById('mensagemdeerrofinal').innerText = 'Vice-Campeão e Campeão devem ser escolhidos.';
+		return;
+	}
+	
+	if(vicecampeao.value == campeao.value){
+		document.getElementById('campeao').focus();
+		document.getElementById('mensagemdeerrofinal').innerText = 'Vice-Campeão e Campeão não podem ser os mesmos.';
+		return;
+	}
+	
+	document.getElementById('actionEliminatorias').value = vicecampeao.value + '_' + campeao.value;
+	document.getElementById('apostaCommand').setAttribute('action','/bolaodacopa/atualizarFinal/');
 	document.getElementById('apostaCommand').submit();
 }
 

@@ -54,27 +54,59 @@ public class ClassificacaoController {
 	@RequestMapping("grafico")
 	public String criaGrafico(Model model) {
 
-		final int max = 12;
+		int max = 11;
 		
 		UsuarioCommand atual = authenticationUtils.getUsario();
 		List<UsuarioCommand> jogadores = classificacaoService.getUsuariosOrdenados();
 		
+		int posicaoAtual = 0;
+		boolean atualEncontrado = false;
+		for(; !atualEncontrado && posicaoAtual < jogadores.size(); posicaoAtual++)
+			if(atual.getId() == jogadores.get(posicaoAtual).getId()) {
+				if(posicaoAtual < max - 2)
+					--max;
+				atualEncontrado = true;
+			}
+		
 		GraficoController grafico = new GraficoController();
 		
-		int[][] dados = new int[jogadores.get(0).getHistoricoPontuacao().size()][Math.min(jogadores.size(), max)+1];
+		Float[][] dados = new Float[tabelaService.getTotalJogosFinalizados()][Math.min(jogadores.size(), max)+1];
 		for(int i = 0; i < dados.length; i++)
-			dados[i][0] = i+1;
+			dados[i][0] = (float)i+1;
 		String[] nomes = new String[Math.min(jogadores.size(), max)];
 		for(int i = 0; i < Math.min(jogadores.size(), max); i++) {
-			List<Integer> historico = jogadores.get(i).getHistoricoPontuacao();
-			for(int j = 0; j < historico.size(); j++)
-				dados[j][i+1] = historico.get(j);
-			nomes[i] = jogadores.get(i).getNome();
+			List<Float> historico = jogadores.get(i).getHistoricoPontuacao();
+			float ultimaPontuacao = 0;
+			for(int j = 0; j < dados.length; j++) {
+				if(historico.size() > j) {
+					dados[j][i+1] = historico.get(j);
+					ultimaPontuacao = historico.get(j);
+				}
+				else {
+					dados[j][i+1] = ultimaPontuacao;
+				}
+			}
+			nomes[i] = (i+1) + "º: " + 
+				(jogadores.get(i).getId() == atual.getId() && posicaoAtual <= max - 1 ? "Você" : jogadores.get(i).getNome());
+		}
+		
+		if(posicaoAtual > max - 1) {
+			List<Float> historico = atual.getHistoricoPontuacao();
+			float ultimaPontuacao = 0;
+			for(int j = 0; j < dados.length; j++)
+				if(historico.size() > j) {
+					dados[j][max] = historico.get(j);
+					ultimaPontuacao = historico.get(j);
+				}
+				else {
+					dados[j][max] = ultimaPontuacao;
+				}
+			nomes[max-1] = posicaoAtual + "º: Você";
 		}
 		
 		grafico.setDados(dados);
 		grafico.setNomes(nomes);
-		grafico.setTitulo("Evolução da pontuação dos " + max + " melhores colocados");
+		grafico.setTitulo("Evolução da pontuação dos 10 melhores colocados");
 		grafico.setSubtitulo("");
 				
         model.addAttribute("grafico", grafico);

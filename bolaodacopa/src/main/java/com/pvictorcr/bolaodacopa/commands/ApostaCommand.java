@@ -14,6 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ApostaCommand extends BaseCommand {
 
+	private PaisCommand campeao;
+	private PaisCommand viceCampeao;
+	
 	private String actionGrupos;
 	private String actionEliminatorias;
 	private List<JogoApostaCommand> jogosApostas = new ArrayList<JogoApostaCommand>();
@@ -32,5 +35,14 @@ public class ApostaCommand extends BaseCommand {
 				return true;
 		
 		return false;
+	}
+	
+	public boolean finalJaApostada() {
+		
+		if(campeao == null || campeao.getId() == 0 ||
+			viceCampeao == null || viceCampeao.getId() == 0)
+			return false;
+		
+		return true;
 	}
 }

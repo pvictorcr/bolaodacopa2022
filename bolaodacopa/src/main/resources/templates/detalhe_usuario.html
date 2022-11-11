@@ -53,6 +53,28 @@
 		</table>
 	</div>
 	</div>
-<script type="text/javascript" src="/resources/js/copa.js"></script>
+	
+	<div class="tabela">
+	
+		<span class="tituloGrupo">Final</span>
+		<p class="mensagemdeerro" id="mensagemdeerrofinal"></p>
+		<table id="apostafinalinicial" class="jogo">
+			
+			<tr>
+			<td colspan="2">Vice-Campe&atilde;o</td>
+			<td colspan="2">Campe&atilde;o</td>
+			</tr>
+			<tr>
+				<td width="10%">
+					<img th:src="@{${usuario_detalhe.aposta.viceCampeao.id} > 0 ? '/resources/img/' + ${usuario_detalhe.aposta.viceCampeao.nomeImg} + '.png' : '/resources/img/bandeira_interrogacao.png'}" class="bandeira" th:alt="@{${usuario_detalhe.aposta.viceCampeao} != null ? ${usuario_detalhe.aposta.viceCampeao.nome} : '?'}"></td>
+				<td width="35%" th:text="${usuario_detalhe.aposta.viceCampeao.nome}">
+				</td>
+				<td width="35%" th:text="${usuario_detalhe.aposta.campeao.nome}">
+				</td>
+				<td width="10%"><img th:src="@{${usuario_detalhe.aposta.campeao.id} > 0 ? '/resources/img/' + ${usuario_detalhe.aposta.campeao.nomeImg} + '.png' : '/resources/img/bandeira_interrogacao.png'}" class="bandeira" th:alt="@{${usuario_detalhe.aposta.campeao} != null ? ${usuario_detalhe.aposta.campeao.nome} : '?'}"></td>
+			</tr>
+		</table>
+	</div>
+<script type="text/javascript" th:src="@{'/resources/js/copa.js'}"></script>
 </body>
 </html>

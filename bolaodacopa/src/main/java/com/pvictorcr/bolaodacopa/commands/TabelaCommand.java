@@ -18,6 +18,8 @@ public class TabelaCommand extends BaseCommand {
 	private EliminatoriaCommand[] eliminatorias = new EliminatoriaCommand[5];
 	private UsuarioCommand usuario;
 	
+	public final static int TOTAL_JOGOS = 48;
+	
 	public TabelaCommand() {
 		this.grupos = new ArrayList<GrupoCommand>();
 		eliminatorias[Fases.FINAIS.ordinal()] = new EliminatoriaCommand();

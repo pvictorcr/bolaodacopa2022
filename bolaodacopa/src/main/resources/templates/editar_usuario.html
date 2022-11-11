@@ -59,7 +59,37 @@
 		</table>
 	</div>
 	</div>
+	
+	<div class="tabela">
+	
+		<span class="tituloGrupo">Final</span>
+		<p class="mensagemdeerro" id="mensagemdeerrofinal"></p>
+		<table id="apostafinalinicial" class="jogo">
+			
+			<tr>
+			<td colspan="2">Vice-Campe&atilde;o</td>
+			<td colspan="2">Campe&atilde;o</td>
+			</tr>
+			<tr>
+				<td width="10%">
+					<img th:src="@{${usuario_detalhe.aposta.viceCampeao.id} > 0 ? '/resources/img/' + ${usuario_detalhe.aposta.viceCampeao.nomeImg} + '.png' : '/resources/img/bandeira_interrogacao.png'}" class="bandeira" th:alt="@{${usuario_detalhe.aposta.viceCampeao} != null ? ${usuario_detalhe.aposta.viceCampeao.nome} : '?'}"></td>
+				<td width="35%">
+					<select name="vicecampeao" id="vicecampeao">
+						<option value="0">selecione</option>
+						<option th:each="pais : ${paises}" th:value="${pais.nome}" th:text="${pais.nome}" th:selected="${pais.nome.equals(usuario_detalhe.aposta.viceCampeao.nome)}"></option>
+					</select>
+				</td>
+				<td width="35%">
+					<select name="campeao" id="campeao">
+						<option value="0">selecione</option>
+						<option th:each="pais : ${paises}" th:value="${pais.nome}" th:text="${pais.nome}" th:selected="${pais.nome.equals(usuario_detalhe.aposta.campeao.nome)}"></option>
+					</select></td>
+				<td width="10%"><img th:src="@{${usuario_detalhe.aposta.campeao.id} > 0 ? '/resources/img/' + ${usuario_detalhe.aposta.campeao.nomeImg} + '.png' : '/resources/img/bandeira_interrogacao.png'}" class="bandeira" th:alt="@{${usuario_detalhe.aposta.campeao} != null ? ${usuario_detalhe.aposta.campeao.nome} : '?'}"></td>
+				<td width="10%"><img th:src="@{${not usuario_detalhe.aposta.finalJaApostada} ? '/resources/img/botao_salvar_red.png' : '/resources/img/botao_modificar_red.png'}" th:onclick="'javascript:salvarFinalAdm()'"/></td>
+			</tr>
+		</table>
+	</div>
 </form>
-<script type="text/javascript" src="/resources/js/copa_adm.js"></script>
+<script type="text/javascript" th:src="@{'/resources/js/copa_adm.js'}"></script>
 </body>
 </html>

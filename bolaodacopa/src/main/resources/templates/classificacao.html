@@ -13,15 +13,16 @@
 	<div class="tabela">
 		<table>
 			<tr th:each="participante, stat1 : ${classificacao}">
-				<td  th:text="${participante.nome}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen;' : ''}">Joao da Silva</td>
+				<td th:text="${participante.nome}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen;' : ''}">Joao da Silva</td>
 				<td th:text="@{${stat1.index + 1} + '&deg; lugar'}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen' : ''}"></td>
 				<td th:text="@{${participante.getPontuacao()} + ' pontos'}" th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; ' : ''}">36 pontos</td>
 				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}"><img th:src="@{'/resources/img/' + ${participante.getNomeImagemClassificacao()} + '.png'}" class="bandeira" th:alt="${participante.getNomeImagemClassificacao()}"></td>
-				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}"><img class="bandeira" src="/resources/img/olho.png" th:data-parameter1="${participante.email}" onclick="javascript:escolherUsuarioDetalhes(this.getAttribute('data-parameter1'));"/></td>
+				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}"><img class="bandeira" th:src="@{'/resources/img/olho.png'}" th:data-parameter1="${participante.email}" onclick="javascript:escolherUsuarioDetalhes(this.getAttribute('data-parameter1'));"/></td>
+				<td th:style="@{${participante.email.equals(usuario.email)} ? 'background-color:lightgreen; width:5%' : 'width:5%'}" th:if="${usuario.isAdmin()}" th:text="${participante.getPorcentagemJogosPreenchidos}"></td>
 			</tr>
 		</table>
 	</div>
 </form>
-	<script type="text/javascript" src="/resources/js/copa.js"></script>
+	<script type="text/javascript" th:src="@{'/resources/js/copa.js'}"></script>
 </body>
 </html>

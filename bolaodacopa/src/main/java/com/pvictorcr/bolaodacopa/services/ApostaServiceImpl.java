@@ -14,6 +14,7 @@ import com.pvictorcr.bolaodacopa.commands.ApostaCommand;
 import com.pvictorcr.bolaodacopa.commands.JogoApostaCommand;
 import com.pvictorcr.bolaodacopa.commands.UsuarioCommand;
 import com.pvictorcr.bolaodacopa.converters.JogoApostaCommandToJogoAposta;
+import com.pvictorcr.bolaodacopa.converters.PaisCommandoToPais;
 import com.pvictorcr.bolaodacopa.converters.UsuarioToUsuarioCommand;
 import com.pvictorcr.bolaodacopa.model.Aposta;
 import com.pvictorcr.bolaodacopa.model.JogoAposta;
@@ -33,15 +34,18 @@ public class ApostaServiceImpl implements ApostaService {
 	private final ApostaRepository apostaRepository;
 	private final JogoApostaRepository jogoApostaRepository;
 	private final JogoApostaCommandToJogoAposta jogoApostaCommandToJogoAposta;
+	private final PaisCommandoToPais paisCommandoToPais;
 	
 	public ApostaServiceImpl(ApostaRepository apostaRepository, UsuarioRepository usuarioRepository, UsuarioToUsuarioCommand usuarioToUsuarioCommand,
-			JogoApostaRepository jogoApostaRepository, JogoApostaCommandToJogoAposta jogoApostaCommandToJogoAposta) {
+			JogoApostaRepository jogoApostaRepository, JogoApostaCommandToJogoAposta jogoApostaCommandToJogoAposta,
+			PaisCommandoToPais paisCommandoToPais) {
 		
 		this.usuarioRepository = usuarioRepository;
 		this.usuarioToUsuarioCommand = usuarioToUsuarioCommand;
 		this.apostaRepository = apostaRepository;
 		this.jogoApostaRepository = jogoApostaRepository;
 		this.jogoApostaCommandToJogoAposta = jogoApostaCommandToJogoAposta;
+		this.paisCommandoToPais = paisCommandoToPais;
 	}
 	
 	@Override
@@ -131,6 +135,30 @@ public class ApostaServiceImpl implements ApostaService {
 		catch(Exception e) {
 			log.error("Tentativa de salvar o jogo '" + command.getJogo().getNumeroDoJogo() + "' falhou: " + e);
 			return "Erro ao tentar salvar o jogo-aposta '" + command.getJogo().getP1().getNome() + " x " + command.getJogo().getP2().getNome() + "'";
+		}
+	}
+	
+	public String saveApostaCommandFinais(ApostaCommand aposta) {
+		
+		Optional<Aposta> a = apostaRepository.findById(aposta.getId());
+		
+		if(!a.isPresent()) {
+			log.error("Aposta numero '" + aposta.getId() + "' nao esta presente no BD");
+			return "Aposta numero '" + aposta.getId() + "' nao esta presente no BD";
+		}
+
+		a.get().setViceCampeao(paisCommandoToPais.convert(aposta.getViceCampeao()));
+		a.get().setCampeao(paisCommandoToPais.convert(aposta.getCampeao()));
+		
+		try {
+			apostaRepository.save(a.get());
+			log.info("Campeão " + aposta.getCampeao().getNome() + " e vice-campeão " + aposta.getViceCampeao().getNome() + " apostados com sucesso'");
+			
+			return "";
+		}
+		catch(Exception e) {
+			log.error("Tentativa de salvar final falhou: " + e);
+			return "Erro ao tentar salvar final";
 		}
 	}
 	

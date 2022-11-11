@@ -1,6 +1,6 @@
 function salvarApostaGruposAdm(grupo, jogo, numerodojogo, terminado){
 	
-	document.getElementById('apostaCommand').setAttribute('action','/atualizargrupousuario/');
+	document.getElementById('apostaCommand').setAttribute('action','/bolaodacopa/atualizargrupousuario/');
 	
 	if(!isInt(document.getElementById('apostagrupo_' + grupo).rows[jogo].cells[2].getElementsByTagName("input")[0].value) ||
 		!isInt(document.getElementById('apostagrupo_' + grupo).rows[jogo].cells[4].getElementsByTagName("input")[0].value))
@@ -18,7 +18,7 @@ function salvarApostaGruposAdm(grupo, jogo, numerodojogo, terminado){
 
 function salvarApostaEliminatoriasAdm(fase, jogo, numerodojogo, terminado){
 	
-	document.getElementById('apostaCommand').setAttribute('action','/atualizareliminatoriausuario/');
+	document.getElementById('apostaCommand').setAttribute('action','/bolaodacopa/atualizareliminatoriausuario/');
 	
 	if(!isInt(document.getElementById('apostaeliminatorias_' + fase).rows[jogo].cells[2].getElementsByTagName("input")[0].value) ||
 		!isInt(document.getElementById('apostaeliminatorias_' + fase).rows[jogo].cells[4].getElementsByTagName("input")[0].value))
@@ -31,6 +31,28 @@ function salvarApostaEliminatoriasAdm(fase, jogo, numerodojogo, terminado){
 		return;
 	
 	document.getElementById('actionEliminatorias').value = fase + '_' + jogo + '_' + numerodojogo + '_' + terminado;
+	document.getElementById('apostaCommand').submit();
+}
+
+function salvarFinalAdm(){
+	
+	var vicecampeao = document.getElementById("vicecampeao");
+	var campeao = document.getElementById("campeao");
+	
+	if(vicecampeao.value == 0 || campeao.value == 0){
+		document.getElementById('campeao').focus();
+		document.getElementById('mensagemdeerrofinal').innerText = 'Vice-Campeão e Campeão devem ser escolhidos.';
+		return;
+	}
+	
+	if(vicecampeao.value == campeao.value){
+		document.getElementById('campeao').focus();
+		document.getElementById('mensagemdeerrofinal').innerText = 'Vice-Campeão e Campeão não podem ser os mesmos.';
+		return;
+	}
+	
+	document.getElementById('actionEliminatorias').value = vicecampeao.value + '_' + campeao.value;
+	document.getElementById('apostaCommand').setAttribute('action','/bolaodacopa/atualizarFinalUsuario/');
 	document.getElementById('apostaCommand').submit();
 }
 

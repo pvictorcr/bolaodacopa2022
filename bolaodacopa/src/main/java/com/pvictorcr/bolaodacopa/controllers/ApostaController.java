@@ -1,5 +1,6 @@
 package com.pvictorcr.bolaodacopa.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.pvictorcr.bolaodacopa.commands.JogoApostaCommand;
+import com.pvictorcr.bolaodacopa.commands.PaisCommand;
 import com.pvictorcr.bolaodacopa.commands.TabelaCommand;
 import com.pvictorcr.bolaodacopa.commands.UsuarioCommand;
 import com.pvictorcr.bolaodacopa.converters.JogoApostaToJogoApostaCommand;
@@ -20,6 +22,7 @@ import com.pvictorcr.bolaodacopa.repositories.JogoApostaRepository;
 import com.pvictorcr.bolaodacopa.repositories.JogoRepository;
 import com.pvictorcr.bolaodacopa.security.AuthenticationUtils;
 import com.pvictorcr.bolaodacopa.services.ApostaService;
+import com.pvictorcr.bolaodacopa.services.PaisService;
 import com.pvictorcr.bolaodacopa.services.TabelaService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,15 +36,18 @@ public class ApostaController {
 	private final AuthenticationUtils authenticationUtils;
 	private final JogoRepository jogoRepository;
 	private final JogoToJogoCommand jogoToJogoCommand;
+	private final PaisService paisService;
 	
 	public ApostaController(ApostaService apostaService, TabelaService tabelaService, AuthenticationUtils authenticationUtils, JogoRepository jogoRepository,
-			JogoToJogoCommand jogoToJogoCommand, JogoApostaRepository jogoApostaRepository, JogoApostaToJogoApostaCommand jogoApostaToJogoApostaCommand) {
+			JogoToJogoCommand jogoToJogoCommand, JogoApostaRepository jogoApostaRepository,
+			JogoApostaToJogoApostaCommand jogoApostaToJogoApostaCommand, PaisService paisService) {
 		
 		this.apostaService = apostaService;
 		this.tabelaService = tabelaService;
 		this.authenticationUtils = authenticationUtils;
 		this.jogoRepository = jogoRepository;
 		this.jogoToJogoCommand = jogoToJogoCommand;
+		this.paisService = paisService;
 	}
 	
 	@GetMapping
@@ -52,9 +58,11 @@ public class ApostaController {
 
 		TabelaCommand tabelaCommand = tabelaService.findTabelaGruposCommands();
 		tabelaCommand.setUsuario(u);
+		List<PaisCommand> paises = paisService.findAllOrdered();
 
 		model.addAttribute("usuario", u);
 		model.addAttribute("tabelaCommand", tabelaCommand);
+		model.addAttribute("paises", paises);
 		model.addAttribute("result", model.getAttribute("result"));
 
 		return "apostas";
@@ -156,6 +164,22 @@ public class ApostaController {
 			log.error("Falhou ao tentar atualizar o jogo do grupo: " + e);
 			erro = "Houve um erro no envio da atualizaçao.";
 		}
+		
+		attributes.addFlashAttribute("result", erro);
+		
+		return "redirect:/apostas";
+	}
+	
+	@RequestMapping(value="atualizarFinal", method = RequestMethod.POST)
+	public String atualizarFinal(@ModelAttribute TabelaCommand form, RedirectAttributes attributes){
+		
+		UsuarioCommand u = authenticationUtils.getUsario();
+		String erro = "";
+		
+		u.getAposta().setViceCampeao(paisService.findByName(form.getActionEliminatorias().split("_")[0]));
+		u.getAposta().setCampeao(paisService.findByName(form.getActionEliminatorias().split("_")[1]));
+		
+		erro = apostaService.saveApostaCommandFinais(u.getAposta());
 		
 		attributes.addFlashAttribute("result", erro);
 		
